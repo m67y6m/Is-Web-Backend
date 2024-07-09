@@ -1,6 +1,9 @@
-package com.hotelBooking.Hotel.Tables;
+package com.hotelBooking.Hotel.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -8,7 +11,7 @@ public class Customers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private int customerId;
+    private Long customerId;
 
     @Column(name = "customer_name")
     private String customerName;
@@ -28,13 +31,20 @@ public class Customers {
     @Column(name = "customer_status")
     private String customerStatus;
 
+    @Column(name = "role")
+    private String role = "customer";
+
+    @OneToMany (mappedBy = "customers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List <Bookings> bookings;
+
     // Getters and Setters
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -84,5 +94,21 @@ public class Customers {
 
     public  void  setCustomerStatus(String CustomerStatus){
         this.customerStatus = customerStatus;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public List<Bookings> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Bookings> bookings) {
+        this.bookings = bookings;
     }
 }

@@ -1,7 +1,8 @@
 package com.hotelBooking.Hotel.Controller;
 
 import com.hotelBooking.Hotel.Services.CustomerServices;
-import com.hotelBooking.Hotel.Tables.Customers;
+import com.hotelBooking.Hotel.Models.Customers;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,19 +31,32 @@ public class CustomerController {
         response.put("message", "Registration succeeded");
         return ResponseEntity.ok(response);
     }
-//    public ResponseEntity<Customers> addCustomers(@RequestBody Customers customers) {
-//        try {
-//            customers.setCustomerStatus("Active");
-//
-//            Customers savedCustomers = customerServices.saveCustomer(customers);
-//
-//            return ResponseEntity.ok(savedCustomers);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(500).body(null);
-//        }
-//    }
+
+    @PostMapping("/customerLogIn")
+    public ResponseEntity<Map<String, String>> customerLogIn(@RequestBody Customers customers, HttpSession  session) {
+        Customers foundCustomer = customerServices.findByCustomerEmail(customers.getCustomerEmail());
+        Map<String, String> response = new HashMap<>();
+
+        if (foundCustomer == null) {
+            response.put("message", "Customer Not Found");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (foundCustomer.getCustomerPassword().equals(customers.getCustomerPassword())) {
+            session.setAttribute("customers", foundCustomer);
+
+            response.put("message", "SignIn Successfully");
+            response.put("role", foundCustomer.getRole());
+            response.put("email", foundCustomer.getCustomerEmail());
+            response.put("id", String.valueOf(foundCustomer.getCustomerId()));
+            return ResponseEntity.ok(response);
+
+        }else {
+            response.put("message", "Incorrect Email Or Password");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody Customers newCustomer) {

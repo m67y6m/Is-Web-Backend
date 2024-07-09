@@ -1,6 +1,6 @@
 package com.hotelBooking.Hotel.Services;
 
-import com.hotelBooking.Hotel.Tables.Customers;
+import com.hotelBooking.Hotel.Models.Customers;
 import com.hotelBooking.Hotel.Repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

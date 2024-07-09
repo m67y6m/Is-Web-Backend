@@ -1,7 +1,10 @@
 package com.hotelBooking.Hotel.Repository;
 
-import com.hotelBooking.Hotel.Tables.Rooms;
+import com.hotelBooking.Hotel.Models.Rooms;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomRepository extends JpaRepository<Rooms, Integer> {
+import java.util.Optional;
+
+public interface RoomRepository extends JpaRepository<Rooms, Long> {
+    Optional<Rooms> findById(Long roomId);
 }

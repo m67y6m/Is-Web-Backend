@@ -1,6 +1,9 @@
-package com.hotelBooking.Hotel.Tables;
+package com.hotelBooking.Hotel.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -9,7 +12,7 @@ public class Rooms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
-    private int roomId;
+    private Long roomId;
 
     @Column(name = "room_type")
     private String roomType;
@@ -23,12 +26,16 @@ public class Rooms {
     @Column(name = "room_status" )
     private String roomStatus;
 
+    @OneToMany (mappedBy = "rooms", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Bookings> bookings;
 
-    public int getRoomId(){
+
+    public Long getRoomId(){
         return roomId;
     }
 
-    public void setRoomId (int roomId) {
+    public void setRoomId (Long roomId) {
         this.roomId = roomId;
     }
 
@@ -62,6 +69,14 @@ public class Rooms {
 
     public void setRoomPicture(String roomPicture){
         this.roomPicture = roomPicture;
+    }
+
+    public List<Bookings> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Bookings> bookings) {
+        this.bookings = bookings;
     }
 
 }
